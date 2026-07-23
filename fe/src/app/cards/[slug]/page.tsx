@@ -1,5 +1,4 @@
 import { cards } from "@/constants/cards";
-import CardDetail from "@/components/card/CardDetail";
 
 interface PageProps {
   params: {
@@ -18,15 +17,5 @@ export default function CardDetailPage({ params }: PageProps) {
     );
   }
 
-  return (
-    <main>
-      <CardDetail
-        title={card.title}
-        image={card.image}
-        description={card.description}
-        benefits={card.benefits}
-        videos={card.videos}
-      />
-    </main>
-  );
+  return <main></main>;
 }
