@@ -3,6 +3,8 @@ const cors = require("cors");
 
 const keyRoutes = require("./routes/key.route");
 const authRoutes = require("./routes/auth.route");
+const videoRoutes = require("./routes/video.route");
+const cardRoutes = require("./routes/card.route"); // thêm dòng này
 
 const app = express();
 
@@ -29,9 +31,14 @@ app.get("/", (req, res) => {
   });
 });
 
+// Routes
 app.use("/api/keys", keyRoutes);
 
 app.use("/api/auth", authRoutes);
+
+app.use("/api/videos", videoRoutes);
+
+app.use("/api/cards", cardRoutes); // thêm dòng này
 
 app.use((req, res) => {
   console.log("404 API not found:", req.method, req.originalUrl);

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const videoSchema = new mongoose.Schema(
+const cardSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -25,31 +25,16 @@ const videoSchema = new mongoose.Schema(
       default: "",
     },
 
-    videoUrl: {
-      type: String,
-      required: true,
-    },
+    videos: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Video",
+      },
+    ],
 
     category: {
       type: String,
       default: "general",
-    },
-
-    brand: {
-      type: String,
-      default: "",
-      // Ví dụ: Huggies, Glico
-    },
-
-    duration: {
-      type: Number,
-      default: 0,
-      // tính bằng giây
-    },
-
-    viewCount: {
-      type: Number,
-      default: 0,
     },
 
     order: {
@@ -73,4 +58,4 @@ const videoSchema = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model("Video", videoSchema);
+module.exports = mongoose.model("Card", cardSchema);
