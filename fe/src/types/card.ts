@@ -12,9 +12,7 @@ export interface Card {
 
   thumbnail: string;
 
-
   videos: Video[];
-
 
   category: string;
 
@@ -23,7 +21,6 @@ export interface Card {
   status: "active" | "inactive";
 
   isFeatured: boolean;
-
 
   createdAt: string;
 

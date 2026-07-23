@@ -1,17 +1,17 @@
 interface Props {
   title: string;
   thumbnail: string;
-  url: string;
+  videoUrl: string;
 }
 
-export default function VideoItem({ title, thumbnail, url }: Props) {
+export default function VideoItem({ title, thumbnail, videoUrl }: Props) {
   return (
     <div>
       <img src={thumbnail} alt={title} />
 
       <h3>{title}</h3>
 
-      <a href={url}>Xem video</a>
+      <a href={videoUrl}>Xem video</a>
     </div>
   );
 }
