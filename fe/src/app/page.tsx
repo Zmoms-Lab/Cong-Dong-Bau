@@ -1,13 +1,21 @@
-import Link from "next/link";
+import {
+  Navbar,
+  Hero,
+  Features,
+  CardPreview,
+  CTA,
+  Footer,
+} from "@/components/home";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <main>
-      <h1>Cong Dong Bau</h1>
-
-      <p>Bộ thẻ phát triển cho bé</p>
-
-      <Link href="/cards">Xem bộ thẻ</Link>
-    </main>
+    <>
+      <Navbar />
+      <Hero />
+      <Features />
+      <CardPreview />
+      <CTA />
+      <Footer />
+    </>
   );
 }

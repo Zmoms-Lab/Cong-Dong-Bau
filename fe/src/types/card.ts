@@ -1,23 +1,31 @@
-export interface Video {
-  id: string;
-  title: string;
-  thumbnail: string;
-  url: string;
-}
+import { Video } from "./video";
 
 
 export interface Card {
-  id: string;
+  _id: string;
 
   title: string;
 
   slug: string;
 
-  image: string;
-
   description: string;
 
-  benefits: string[];
+  thumbnail: string;
+
 
   videos: Video[];
+
+
+  category: string;
+
+  order: number;
+
+  status: "active" | "inactive";
+
+  isFeatured: boolean;
+
+
+  createdAt: string;
+
+  updatedAt: string;
 }

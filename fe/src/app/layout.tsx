@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Cộng Đồng Bầu",
   description: "Bộ thẻ phát triển dành cho mẹ và bé",
+  icons: {
+    icon: "/images/logo.png",
+  },
 };
 
 export default function RootLayout({
