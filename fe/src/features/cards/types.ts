@@ -1,28 +1,14 @@
-import { Video } from "./video";
-
-
 export interface Card {
   _id: string;
-
   title: string;
-
   slug: string;
-
   description: string;
-
   thumbnail: string;
-
-  videos: Video[];
-
+  videos: string[];
   category: string;
-
   order: number;
-
-  status: "active" | "inactive";
-
+  status: "draft" | "active" | "hidden";
   isFeatured: boolean;
-
   createdAt: string;
-
   updatedAt: string;
 }

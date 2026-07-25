@@ -1,20 +1,21 @@
 "use client";
 
-import { Mail, Lock, ArrowRight } from "lucide-react";
+import { ArrowRight, Lock, Mail } from "lucide-react";
+import { ROUTES } from "@/constants/routes";
 import { useRouter } from "next/navigation";
-import { ROUTES } from "@/config/routes";
 
 export default function LoginForm() {
   const router = useRouter();
 
-  const handleSubmit = () => {
-    // Chưa xử lý login
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
     router.push(ROUTES.CARDS);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-sm p-8">
+    <div className="flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm">
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-2xl font-bold text-gray-800">Đăng nhập</h1>
@@ -24,8 +25,8 @@ export default function LoginForm() {
           </p>
         </div>
 
-        <div className="space-y-4">
-          {/* Email / Phone */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Email */}
           <div className="relative">
             <Mail className="absolute left-3 top-3.5 text-gray-400" size={20} />
 
@@ -40,7 +41,9 @@ export default function LoginForm() {
                 py-3
                 pl-10
                 pr-4
+                text-sm
                 outline-none
+                transition
                 focus:border-pink-400
               "
             />
@@ -61,7 +64,9 @@ export default function LoginForm() {
                 py-3
                 pl-10
                 pr-4
+                text-sm
                 outline-none
+                transition
                 focus:border-pink-400
               "
             />
@@ -70,6 +75,7 @@ export default function LoginForm() {
           {/* Forgot password */}
           <div className="text-right">
             <button
+              type="button"
               className="
                 text-sm
                 text-pink-500
@@ -80,28 +86,27 @@ export default function LoginForm() {
             </button>
           </div>
 
-          {/* Submit */}
           <button
-            onClick={handleSubmit}
+            type="submit"
             className="
-              w-full
               flex
+              w-full
               items-center
               justify-center
               gap-2
               rounded-xl
               bg-pink-500
               py-3
-              text-white
               font-medium
-              hover:bg-pink-600
+              text-white
               transition
+              hover:bg-pink-600
             "
           >
             Đăng nhập
             <ArrowRight size={18} />
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );

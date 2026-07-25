@@ -1,5 +1,5 @@
-import { getAllCards } from "@/services/card.service";
-import { Card } from "@/types/card";
+import { getAllCards } from "@/features/cards/services/card.service";
+import { Card } from "@/features/cards/types";
 
 export default async function CardsPage() {
   const response = await getAllCards();
@@ -17,12 +17,9 @@ export default async function CardsPage() {
           {cards.map((card) => (
             <div key={card._id} className="border rounded-xl p-4 shadow-sm">
               <h2 className="text-lg font-semibold">{card.title}</h2>
-
               <p className="text-gray-500 mt-2">{card.description}</p>
-
               <p className="mt-3 text-sm">Slug: {card.slug}</p>
-
-              <p className="text-sm">Video: {card.videos?.length || 0}</p>
+              <p className="text-sm">Video: {card.videos?.length ?? 0}</p>
             </div>
           ))}
         </div>

@@ -1,6 +1,6 @@
 import axiosClient from "@/lib/axios";
 
-import { Card } from "@/types/card";
+import { Card } from "@/features/cards/types";
 import { ApiResponse } from "@/types/api";
 
 

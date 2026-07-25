@@ -1,14 +1,20 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const keyRoutes = require("./routes/key.route");
 const authRoutes = require("./routes/auth.route");
 const videoRoutes = require("./routes/video.route");
-const cardRoutes = require("./routes/card.route"); // thêm dòng này
+const cardRoutes = require("./routes/card.route");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 
@@ -17,6 +23,8 @@ app.use(
     extended: true,
   }),
 );
+
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
@@ -31,14 +39,13 @@ app.get("/", (req, res) => {
   });
 });
 
-// Routes
 app.use("/api/keys", keyRoutes);
 
 app.use("/api/auth", authRoutes);
 
 app.use("/api/videos", videoRoutes);
 
-app.use("/api/cards", cardRoutes); // thêm dòng này
+app.use("/api/cards", cardRoutes);
 
 app.use((req, res) => {
   console.log("404 API not found:", req.method, req.originalUrl);

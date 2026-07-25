@@ -19,13 +19,13 @@ export interface Video {
 
   viewCount: number;
 
-  status: "active" | "inactive";
-
   order: number;
+
+  status: "draft" | "active" | "hidden";
 
   isFeatured: boolean;
 
-  createdAt?: string;
+  createdAt: string;
 
-  updatedAt?: string;
+  updatedAt: string;
 }

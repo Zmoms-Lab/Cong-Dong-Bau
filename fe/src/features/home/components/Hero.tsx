@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ROUTES } from "@/constants/routes";
 
 export default function Hero() {
   return (
@@ -23,14 +24,14 @@ export default function Hero() {
 
           <div className="mt-10 flex gap-4">
             <Link
-              href="/activate"
+              href={ROUTES.ACTIVATE}
               className="rounded-xl bg-pink-600 px-8 py-4 font-semibold text-white hover:bg-pink-700"
             >
               Kích hoạt thẻ
             </Link>
 
             <Link
-              href="/login"
+              href={ROUTES.LOGIN}
               className="rounded-xl border border-pink-600 px-8 py-4 font-semibold text-pink-600 hover:bg-pink-50"
             >
               Đăng nhập

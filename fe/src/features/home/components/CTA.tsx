@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ROUTES } from "@/constants/routes";
 
 export default function CTA() {
   return (
@@ -12,14 +13,14 @@ export default function CTA() {
 
         <div className="mt-10 flex justify-center gap-4">
           <Link
-            href="/activate"
+            href={ROUTES.ACTIVATE}
             className="rounded-xl bg-white px-8 py-4 font-semibold text-pink-600"
           >
             Kích hoạt thẻ
           </Link>
 
           <Link
-            href="/login"
+            href={ROUTES.LOGIN}
             className="rounded-xl border border-white px-8 py-4 font-semibold"
           >
             Đăng nhập
