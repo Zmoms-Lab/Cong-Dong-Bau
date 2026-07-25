@@ -9,9 +9,25 @@ const cardRoutes = require("./routes/card.route");
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:3000", // Next.js local
+  process.env.CLIENT_URL, // Frontend production
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin(origin, callback) {
+      // Cho phép Postman hoặc request không có Origin
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS: Origin ${origin} không được phép`));
+    },
     credentials: true,
   }),
 );
@@ -28,7 +44,6 @@ app.use(cookieParser());
 
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
-
   next();
 });
 
@@ -40,11 +55,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/keys", keyRoutes);
-
 app.use("/api/auth", authRoutes);
-
 app.use("/api/videos", videoRoutes);
-
 app.use("/api/cards", cardRoutes);
 
 app.use((req, res) => {
