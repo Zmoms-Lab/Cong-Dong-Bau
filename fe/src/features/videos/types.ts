@@ -11,6 +11,8 @@ export interface Video {
 
   videoUrl: string;
 
+  card?: string | null;
+
   category: string;
 
   brand: string;
@@ -21,7 +23,10 @@ export interface Video {
 
   order: number;
 
-  status: "draft" | "active" | "hidden";
+  status:
+    | "draft"
+    | "active"
+    | "hidden";
 
   isFeatured: boolean;
 

@@ -1,55 +1,69 @@
 import axiosClient from "@/lib/axios";
 
-import { Card } from "@/features/cards/types";
+import { Card } from "../types";
 import { ApiResponse } from "@/types/api";
 
 
-// CREATE CARD
 export const createCard = async (
-  data: Partial<Card>
+  data: Partial<Card>,
 ): Promise<ApiResponse<Card>> => {
-  const response = await axiosClient.post<ApiResponse<Card>>(
-    "/cards",
-    data
-  );
+  const response =
+    await axiosClient.post<ApiResponse<Card>>(
+      "/cards",
+      data,
+    );
 
   return response.data;
 };
 
 
-// GET ALL CARD
+export const updateCard = async (
+  id: string,
+  data: Partial<Card>,
+): Promise<ApiResponse<Card>> => {
+  const response =
+    await axiosClient.patch<ApiResponse<Card>>(
+      `/cards/${id}`,
+      data,
+    );
+
+  return response.data;
+};
+
+
 export const getAllCards = async (): Promise<ApiResponse<Card[]>> => {
-  const response = await axiosClient.get<ApiResponse<Card[]>>(
-    "/cards"
-  );
+  const response =
+    await axiosClient.get<ApiResponse<Card[]>>(
+      "/cards",
+    );
 
   return response.data;
 };
 
 
-// GET CARD DETAIL
 export const getCardDetail = async (
-  slug: string
+  slug: string,
 ): Promise<ApiResponse<Card>> => {
-  const response = await axiosClient.get<ApiResponse<Card>>(
-    `/cards/${slug}`
-  );
+  const response =
+    await axiosClient.get<ApiResponse<Card>>(
+      `/cards/${slug}`,
+    );
 
   return response.data;
 };
 
 
-// ADD VIDEO TO CARD
 export const addVideoToCard = async (
   slug: string,
   data: {
     videoId: string;
-  }
+  },
 ): Promise<ApiResponse<Card>> => {
-  const response = await axiosClient.post<ApiResponse<Card>>(
-    `/cards/${slug}/videos`,
-    data
-  );
+  const response =
+    await axiosClient.post<ApiResponse<Card>>(
+      `/cards/${slug}/videos`,
+      data,
+    );
 
   return response.data;
 };

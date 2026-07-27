@@ -1,6 +1,15 @@
+"use client";
+
+
 import {
   useMutation,
+  useQuery,
 } from "@tanstack/react-query";
+
+
+import {
+  useRouter,
+} from "next/navigation";
 
 
 import {
@@ -13,12 +22,23 @@ import {
 } from "@/store/auth.store";
 
 
-export const useLogin = () => {
+import {
+  ROUTES,
+} from "@/constants/routes";
+
+
+
+export const useLogin =()=>{
+
+
+  const router = useRouter();
+
 
   const setAuth =
     useAuthStore(
-      (state) => state.setAuth,
+      state=>state.setAuth
     );
+
 
 
   return useMutation({
@@ -27,27 +47,83 @@ export const useLogin = () => {
       authService.login,
 
 
-    onSuccess(data) {
+    onSuccess(data){
+
 
       setAuth(
         data.user,
-        data.token,
+        data.accessToken,
       );
+
+
+      router.replace(
+        ROUTES.DASHBOARD
+      );
+
 
     },
 
+
   });
+
 
 };
 
 
-export const useRegister = () => {
+
+
+
+export const useRegister =()=>{
+
+
+  const router = useRouter();
+
+
 
   return useMutation({
 
     mutationFn:
       authService.register,
 
+
+    onSuccess(){
+
+
+      router.replace(
+        ROUTES.LOGIN
+      );
+
+
+    },
+
+
   });
+
+
+};
+
+
+
+
+
+export const useMe =()=>{
+
+
+  return useQuery({
+
+    queryKey:[
+      "auth-me"
+    ],
+
+
+    queryFn:
+      authService.me,
+
+
+    retry:false,
+
+
+  });
+
 
 };

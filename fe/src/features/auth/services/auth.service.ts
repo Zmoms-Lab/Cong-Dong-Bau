@@ -1,16 +1,22 @@
 import axiosClient, {
+  axiosRefresh,
   apiRequest,
 } from "@/lib/axios";
+
 
 import {
   LoginPayload,
   LoginResponse,
+  RefreshResponse,
   RegisterPayload,
   RegisterResponse,
+  MeResponse,
 } from "../types";
 
 
 export const authService = {
+
+
   register: (
     payload: RegisterPayload,
   ) =>
@@ -22,6 +28,7 @@ export const authService = {
     ),
 
 
+
   login: (
     payload: LoginPayload,
   ) =>
@@ -31,4 +38,24 @@ export const authService = {
         payload,
       ),
     ),
+
+
+
+  refresh: () =>
+    apiRequest<RefreshResponse>(
+      axiosRefresh.post(
+        "/auth/refresh",
+      ),
+    ),
+
+
+
+  me: () =>
+    apiRequest<MeResponse>(
+      axiosClient.get(
+        "/auth/me",
+      ),
+    ),
+
+
 };

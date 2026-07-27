@@ -1,110 +1,83 @@
 "use client";
 
 import { ArrowRight, Lock, Mail } from "lucide-react";
-import { ROUTES } from "@/constants/routes";
-import { useRouter } from "next/navigation";
+
+import { useForm } from "react-hook-form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { loginSchema } from "../schemas";
+
+import { z } from "zod";
+
+import { useLogin } from "../hooks/useAuth";
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
-  const router = useRouter();
+  const loginMutation = useLogin();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const { register, handleSubmit } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
 
-    router.push(ROUTES.CARDS);
+  const onSubmit = (data: LoginFormData) => {
+    loginMutation.mutate(data);
   };
 
   return (
-    <div className="flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm">
-        {/* Header */}
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#FFF8FB] via-white to-[#FFF5F8] px-6">
+      <div className="w-full max-w-md rounded-3xl border border-pink-100 bg-white p-8 shadow-xl shadow-pink-100/40">
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-800">Đăng nhập</h1>
+          <h1 className="text-3xl font-bold text-slate-900">Đăng nhập</h1>
 
-          <p className="mt-2 text-sm text-gray-500">
-            Nhập thông tin để tiếp tục
+          <p className="mt-2 text-sm text-slate-500">
+            Tiếp tục sử dụng tài khoản của bạn
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div className="relative">
-            <Mail className="absolute left-3 top-3.5 text-gray-400" size={20} />
+            <Mail
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+              size={20}
+            />
 
             <input
-              type="text"
-              placeholder="Email hoặc số điện thoại"
-              className="
-                w-full
-                rounded-xl
-                border
-                border-gray-200
-                py-3
-                pl-10
-                pr-4
-                text-sm
-                outline-none
-                transition
-                focus:border-pink-400
-              "
+              {...register("email")}
+              type="email"
+              placeholder="Email"
+              className="h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-12 pr-4"
             />
           </div>
 
-          {/* Password */}
           <div className="relative">
-            <Lock className="absolute left-3 top-3.5 text-gray-400" size={20} />
+            <Lock
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+              size={20}
+            />
 
             <input
+              {...register("password")}
               type="password"
               placeholder="Mật khẩu"
-              className="
-                w-full
-                rounded-xl
-                border
-                border-gray-200
-                py-3
-                pl-10
-                pr-4
-                text-sm
-                outline-none
-                transition
-                focus:border-pink-400
-              "
+              className="h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-12 pr-4"
             />
           </div>
 
-          {/* Forgot password */}
-          <div className="text-right">
-            <button
-              type="button"
-              className="
-                text-sm
-                text-pink-500
-                hover:text-pink-600
-              "
-            >
-              Quên mật khẩu?
-            </button>
-          </div>
+          {loginMutation.isError && (
+            <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
+              Email hoặc mật khẩu không đúng.
+            </div>
+          )}
 
           <button
-            type="submit"
-            className="
-              flex
-              w-full
-              items-center
-              justify-center
-              gap-2
-              rounded-xl
-              bg-pink-500
-              py-3
-              font-medium
-              text-white
-              transition
-              hover:bg-pink-600
-            "
+            disabled={loginMutation.isPending}
+            className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-pink-500 font-semibold text-white hover:bg-pink-600 disabled:opacity-50"
           >
-            Đăng nhập
-            <ArrowRight size={18} />
+            {loginMutation.isPending ? "Đang đăng nhập..." : "Đăng nhập"}
+
+            {!loginMutation.isPending && <ArrowRight size={18} />}
           </button>
         </form>
       </div>

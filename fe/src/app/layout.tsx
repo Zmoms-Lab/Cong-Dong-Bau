@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "Cộng Đồng Bầu",
-  description: "Bộ thẻ phát triển dành cho mẹ và bé",
-  icons: {
-    icon: "/images/logo.png",
-  },
+  description: "Nền tảng chia sẻ kiến thức cho mẹ bầu",
 };
 
 export default function RootLayout({
@@ -16,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

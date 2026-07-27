@@ -1,8 +1,14 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+
 import { ROUTES } from "@/constants/routes";
+import { useAuthStore } from "@/store/auth.store";
 
 export default function Hero() {
+  const user = useAuthStore((state) => state.user);
+
   return (
     <section className="bg-gradient-to-br from-pink-50 to-white">
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-20 lg:grid-cols-2">
@@ -22,21 +28,38 @@ export default function Hero() {
             đồng hành cùng Cộng Đồng Bầu trong hành trình chăm sóc mẹ và bé.
           </p>
 
-          <div className="mt-10 flex gap-4">
-            <Link
-              href={ROUTES.ACTIVATE}
-              className="rounded-xl bg-pink-600 px-8 py-4 font-semibold text-white hover:bg-pink-700"
-            >
-              Kích hoạt thẻ
-            </Link>
+          {user ? (
+            <div className="mt-10">
+              <p className="mb-5 text-lg font-medium text-gray-700">
+                Xin chào{" "}
+                <span className="font-semibold text-pink-600">{user.name}</span>
+                👋
+              </p>
 
-            <Link
-              href={ROUTES.LOGIN}
-              className="rounded-xl border border-pink-600 px-8 py-4 font-semibold text-pink-600 hover:bg-pink-50"
-            >
-              Đăng nhập
-            </Link>
-          </div>
+              <Link
+                href={ROUTES.DASHBOARD}
+                className="inline-flex rounded-xl bg-pink-600 px-8 py-4 font-semibold text-white hover:bg-pink-700"
+              >
+                Mẹ và bé cùng học
+              </Link>
+            </div>
+          ) : (
+            <div className="mt-10 flex gap-4">
+              <Link
+                href={ROUTES.ACTIVATE}
+                className="rounded-xl bg-pink-600 px-8 py-4 font-semibold text-white hover:bg-pink-700"
+              >
+                Kích hoạt thẻ
+              </Link>
+
+              <Link
+                href={ROUTES.LOGIN}
+                className="rounded-xl border border-pink-600 px-8 py-4 font-semibold text-pink-600 hover:bg-pink-50"
+              >
+                Đăng nhập
+              </Link>
+            </div>
+          )}
         </div>
 
         <Image

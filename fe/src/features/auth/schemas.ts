@@ -2,34 +2,84 @@ import { z } from "zod";
 
 
 export const registerSchema = z.object({
+
   key: z
     .string()
-    .min(1, "Registration key is required"),
+    .min(
+      1,
+      "Vui lòng nhập mã kích hoạt",
+    ),
+
 
   name: z
     .string()
-    .min(2, "Name must be at least 2 characters"),
+    .min(
+      2,
+      "Họ tên phải có ít nhất 2 ký tự",
+    ),
+
 
   email: z
     .string()
-    .email("Invalid email"),
+    .email(
+      "Email không hợp lệ",
+    ),
 
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters"),
 
   phone: z
     .string()
+    .min(
+      9,
+      "Số điện thoại không hợp lệ",
+    )
     .optional(),
-});
 
-
-export const loginSchema = z.object({
-  email: z
-    .string()
-    .email("Invalid email"),
 
   password: z
     .string()
-    .min(6, "Password must be at least 6 characters"),
+    .min(
+      6,
+      "Mật khẩu tối thiểu 6 ký tự",
+    ),
+
+
+  confirmPassword: z
+    .string(),
+
+
+})
+.refine(
+
+  (data) =>
+    data.password === data.confirmPassword,
+
+  {
+    message:
+      "Mật khẩu nhập lại không đúng",
+
+    path:[
+      "confirmPassword",
+    ],
+  },
+
+);
+
+
+
+export const loginSchema = z.object({
+
+  email: z
+    .string()
+    .email(
+      "Email không hợp lệ",
+    ),
+
+
+  password: z
+    .string()
+    .min(
+      6,
+      "Mật khẩu tối thiểu 6 ký tự",
+    ),
+
 });
