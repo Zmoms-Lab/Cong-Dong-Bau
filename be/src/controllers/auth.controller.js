@@ -155,6 +155,29 @@ const refresh = async (req, res) => {
   }
 };
 
+const me = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 const createAdmin = async (req, res) => {
   try {
     const { name, email, password, phone } = req.body;
@@ -201,5 +224,6 @@ module.exports = {
   register,
   login,
   refresh,
+  me,
   createAdmin,
 };
