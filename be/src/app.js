@@ -6,18 +6,17 @@ const keyRoutes = require("./routes/key.route");
 const authRoutes = require("./routes/auth.route");
 const videoRoutes = require("./routes/video.route");
 const cardRoutes = require("./routes/card.route");
+const userRoutes = require("./routes/user.route");
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:3000", // Next.js local
-  process.env.CLIENT_URL, // Frontend production
-].filter(Boolean);
+const allowedOrigins = ["http://localhost:3000", process.env.CLIENT_URL].filter(
+  Boolean,
+);
 
 app.use(
   cors({
     origin(origin, callback) {
-      // Cho phép Postman hoặc request không có Origin
       if (!origin) {
         return callback(null, true);
       }
@@ -44,6 +43,7 @@ app.use(cookieParser());
 
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+
   next();
 });
 
@@ -55,9 +55,14 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/keys", keyRoutes);
+
 app.use("/api/auth", authRoutes);
+
 app.use("/api/videos", videoRoutes);
+
 app.use("/api/cards", cardRoutes);
+
+app.use("/api/users", userRoutes);
 
 app.use((req, res) => {
   console.log("404 API not found:", req.method, req.originalUrl);

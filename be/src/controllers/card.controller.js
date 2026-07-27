@@ -1,13 +1,12 @@
 const Card = require("../models/card.model");
-
-// GET ALL CARD
+const Video = require("../models/video.model");
 
 exports.getAllCards = async (req, res) => {
   try {
     const cards = await Card.find({
       status: "active",
     })
-      .populate("videos")
+      .select("-videos")
       .sort({
         order: 1,
         createdAt: -1,
@@ -25,13 +24,20 @@ exports.getAllCards = async (req, res) => {
   }
 };
 
-// GET CARD DETAIL BY SLUG
-
-exports.getCardDetail = async (req, res) => {
+exports.getMyCardDetail = async (req, res) => {
   try {
-    const card = await Card.findOne({
-      slug: req.params.slug,
-    }).populate("videos");
+    const card = await Card.findById(req.card._id).populate({
+      path: "videos",
+      match: {
+        status: "active",
+      },
+      options: {
+        sort: {
+          order: 1,
+          createdAt: -1,
+        },
+      },
+    });
 
     if (!card) {
       return res.status(404).json({
@@ -40,7 +46,7 @@ exports.getCardDetail = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    res.json({
       success: true,
       data: card,
     });
@@ -56,19 +62,9 @@ exports.addVideoToCard = async (req, res) => {
   try {
     const { videoId } = req.body;
 
-    const card = await Card.findOneAndUpdate(
-      {
-        slug: req.params.slug,
-      },
-      {
-        $addToSet: {
-          videos: videoId,
-        },
-      },
-      {
-        new: true,
-      },
-    ).populate("videos");
+    const card = await Card.findOne({
+      slug: req.params.slug,
+    });
 
     if (!card) {
       return res.status(404).json({
@@ -77,10 +73,34 @@ exports.addVideoToCard = async (req, res) => {
       });
     }
 
+    const video = await Video.findById(videoId);
+
+    if (!video) {
+      return res.status(404).json({
+        success: false,
+        message: "Video không tồn tại",
+      });
+    }
+
+    const existed = card.videos.some(
+      (id) => id.toString() === video._id.toString(),
+    );
+
+    if (!existed) {
+      card.videos.push(video._id);
+    }
+
+    video.card = card._id;
+
+    await card.save();
+    await video.save();
+
+    const updatedCard = await Card.findById(card._id).populate("videos");
+
     res.status(200).json({
       success: true,
       message: "Thêm video vào card thành công",
-      data: card,
+      data: updatedCard,
     });
   } catch (error) {
     res.status(500).json({
@@ -103,8 +123,6 @@ exports.createCard = async (req, res) => {
       category,
       order,
       isFeatured,
-
-      // tạo card rỗng video
       videos: [],
     });
 
@@ -112,6 +130,82 @@ exports.createCard = async (req, res) => {
       success: true,
       message: "Tạo card thành công",
       data: card,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.updateCard = async (req, res) => {
+  try {
+    const {
+      title,
+      slug,
+      description,
+      thumbnail,
+      category,
+      order,
+      status,
+      isFeatured,
+    } = req.body;
+
+    const card = await Card.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        slug,
+        description,
+        thumbnail,
+        category,
+        order,
+        status,
+        isFeatured,
+      },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    if (!card) {
+      return res.status(404).json({
+        success: false,
+        message: "Card không tồn tại",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Cập nhật card thành công",
+      data: card,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.deleteCard = async (req, res) => {
+  try {
+    const card = await Card.findById(req.params.id);
+
+    if (!card) {
+      return res.status(404).json({
+        success: false,
+        message: "Card không tồn tại",
+      });
+    }
+
+    await card.deleteOne();
+
+    res.json({
+      success: true,
+      message: "Xóa card thành công",
     });
   } catch (error) {
     res.status(500).json({

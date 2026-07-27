@@ -13,6 +13,7 @@ const videoSchema = new mongoose.Schema(
       required: true,
       unique: true,
       lowercase: true,
+      trim: true,
     },
 
     description: {
@@ -30,6 +31,12 @@ const videoSchema = new mongoose.Schema(
       required: true,
     },
 
+    card: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Card",
+      default: null,
+    },
+
     category: {
       type: String,
       default: "general",
@@ -38,13 +45,11 @@ const videoSchema = new mongoose.Schema(
     brand: {
       type: String,
       default: "",
-      // Ví dụ: Huggies, Glico
     },
 
     duration: {
       type: Number,
       default: 0,
-      // tính bằng giây
     },
 
     viewCount: {

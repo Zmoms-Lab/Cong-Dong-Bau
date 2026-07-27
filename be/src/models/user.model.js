@@ -46,6 +46,30 @@ const userSchema = new mongoose.Schema(
       enum: ["active", "inactive", "blocked"],
       default: "active",
     },
+
+    registrationKeys: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "RegistrationKey",
+      },
+    ],
+
+    cards: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Card",
+      },
+    ],
+
+    points: {
+      type: Number,
+      default: 0,
+    },
+
+    lastActiveAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,

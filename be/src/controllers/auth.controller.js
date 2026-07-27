@@ -23,7 +23,7 @@ const register = async (req, res) => {
     }
 
     const existUser = await User.findOne({
-      email,
+      email: email.toLowerCase(),
     });
 
     if (existUser) {
@@ -35,24 +35,21 @@ const register = async (req, res) => {
 
     const user = await User.create({
       name,
-      email,
+      email: email.toLowerCase(),
       password,
       phone,
     });
 
-    registerKey.status = "used";
-    registerKey.usedBy = user._id;
-    registerKey.usedAt = new Date();
-
-    await registerKey.save();
-
     res.status(201).json({
       success: true,
+      message: "Register success. Please activate your key.",
       data: {
         id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
+        needActivateCard: true,
+        keyId: registerKey._id,
       },
     });
   } catch (error) {
@@ -68,7 +65,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({
-      email,
+      email: email.toLowerCase(),
     }).select("+password");
 
     if (!user) {
@@ -95,7 +92,6 @@ const login = async (req, res) => {
     }
 
     const accessToken = generateAccessToken(user);
-
     const refreshToken = generateRefreshToken(user);
 
     res.cookie("refreshToken", refreshToken, {
@@ -107,9 +103,7 @@ const login = async (req, res) => {
 
     res.json({
       success: true,
-
       accessToken,
-
       user: {
         id: user._id,
         name: user.name,
@@ -161,8 +155,51 @@ const refresh = async (req, res) => {
   }
 };
 
+const createAdmin = async (req, res) => {
+  try {
+    const { name, email, password, phone } = req.body;
+
+    const existUser = await User.findOne({
+      email: email.toLowerCase(),
+    });
+
+    if (existUser) {
+      return res.status(400).json({
+        success: false,
+        message: "Email already exists",
+      });
+    }
+
+    const admin = await User.create({
+      name,
+      email: email.toLowerCase(),
+      password,
+      phone,
+      role: "admin",
+      status: "active",
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Admin created successfully",
+      data: {
+        id: admin._id,
+        name: admin.name,
+        email: admin.email,
+        role: admin.role,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
   refresh,
+  createAdmin,
 };

@@ -22,6 +22,12 @@ const registrationKeySchema = new mongoose.Schema(
       default: null,
     },
 
+    card: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Card",
+      default: null,
+    },
+
     usedAt: {
       type: Date,
       default: null,

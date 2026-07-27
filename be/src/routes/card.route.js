@@ -4,16 +4,38 @@ const router = express.Router();
 
 const cardController = require("../controllers/card.controller");
 
-// CREATE CARD
-router.post("/", cardController.createCard);
+const authMiddleware = require("../middlewares/auth.middleware");
+const roleMiddleware = require("../middlewares/role.middleware");
+const cardAccessMiddleware = require("../middlewares/cardAccess.middleware");
 
-// GET ALL CARD
+router.post(
+  "/",
+  authMiddleware,
+  roleMiddleware("admin"),
+  cardController.createCard,
+);
+
+router.patch(
+  "/:id",
+  authMiddleware,
+  roleMiddleware("admin"),
+  cardController.updateCard,
+);
+
+router.post(
+  "/:slug/videos",
+  authMiddleware,
+  roleMiddleware("admin"),
+  cardController.addVideoToCard,
+);
+
 router.get("/", cardController.getAllCards);
 
-// GET CARD DETAIL
-router.get("/:slug", cardController.getCardDetail);
-
-// ADD VIDEO TO CARD
-router.post("/:slug/videos", cardController.addVideoToCard);
+router.get(
+  "/:slug",
+  authMiddleware,
+  cardAccessMiddleware,
+  cardController.getMyCardDetail,
+);
 
 module.exports = router;
